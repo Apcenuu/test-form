@@ -1,0 +1,8 @@
+parameters:
+	level: 9
+	tmpDir: var
+	paths:
+		- src
+
+	scanDirectories:
+	    - var/cache/dev/Symfony/Config
