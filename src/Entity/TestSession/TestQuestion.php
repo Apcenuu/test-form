@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity\TestSession;
 
 use App\Entity\Question\Question;
+use App\Request\TestQuestionRequest;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\AbstractUid as Uid;
 use Symfony\Component\Uid\Uuid;
@@ -32,19 +33,29 @@ class TestQuestion
     #[ORM\OneToMany(mappedBy: 'testQuestion', targetEntity: ConcreteAnswer::class, cascade: ['persist'])]
     public iterable $concreteAnswers;
 
-    public function __construct(Question $question)
-    {
-        $this->id       = Uuid::v6();
-        $this->question = $question;
-    }
-
     /**
      * @param iterable<ConcreteAnswer> $concreteAnswers
      */
-    public function setConcreteAnswers(iterable $concreteAnswers): self
+    public function __construct(Question $question, iterable $concreteAnswers)
     {
+        $this->id              = Uuid::v6();
+        $this->question        = $question;
         $this->concreteAnswers = $concreteAnswers;
-        return $this;
+    }
+
+    public static function fromRequest(TestQuestionRequest $testQuestionRequest): self
+    {
+        $concreteAnswers = [];
+
+        $self = new self($testQuestionRequest->questionRequest->question, $concreteAnswers);
+
+        foreach ($testQuestionRequest->concreteAnswers as $answer) {
+            $concreteAnswers[] = ConcreteAnswer::fromRequest($answer, $self);
+        }
+
+        $self->concreteAnswers = $concreteAnswers;
+
+        return $self;
     }
 
     public function isCorrectAnswered(): bool

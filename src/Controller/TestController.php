@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Question\Question;
-use App\Entity\TestSession\ConcreteAnswer;
-use App\Entity\TestSession\TestQuestion;
 use App\Entity\TestSession\TestSession;
 use App\Form\TestType;
+use App\Request\TestSessionRequest;
 use Doctrine\ORM\EntityManagerInterface as EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,22 +19,14 @@ final class TestController extends AbstractController
     #[Route(path: '/test', name: 'test')]
     public function test(Request $request, EntityManager $entityManager): Response
     {
-        $testQuestions = [];
-        foreach ($entityManager->getRepository(Question::class)->findAll() as $question) {
-            $testQuestion    = new TestQuestion($question);
-            $concreteAnswers = [];
-            foreach ($question->answerVariants as $answerVariant) {
-                $concreteAnswers[] = new ConcreteAnswer(false, $testQuestion, $answerVariant);
-            }
-            $testQuestion->setConcreteAnswers($concreteAnswers);
-            $testQuestions[] = $testQuestion;
-        }
+        $questions = $entityManager->getRepository(Question::class)->findAll();
 
-        $form = $this->createForm(TestType::class, new TestSession($testQuestions));
+        $form = $this->createForm(TestType::class, TestSessionRequest::buildFromQuestions($questions));
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->getData() instanceof TestSession) {
-            $testSession = $form->getData();
+        if ($form->isSubmitted() && $form->getData() instanceof TestSessionRequest) {
+
+            $testSession = TestSession::fromRequest($form->getData());
 
             $entityManager->persist($testSession);
             $entityManager->flush();

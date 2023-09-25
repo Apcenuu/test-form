@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity\Question;
 
 use App\Entity\TestSession\ConcreteAnswer;
+use App\Request\AnswerVariantRequest;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\AbstractUid as Uid;
 use Symfony\Component\Uid\Uuid;
@@ -37,5 +38,10 @@ class AnswerVariant
         $this->id      = Uuid::v6();
         $this->text    = $text;
         $this->correct = $correct;
+    }
+
+    public static function fromRequest(AnswerVariantRequest $answerVariant): self
+    {
+        return new self($answerVariant->answerVariant->text, $answerVariant->answerVariant->correct);
     }
 }

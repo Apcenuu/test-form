@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Entity\TestSession\ConcreteAnswer;
+use App\Request\ConcreteAnswerRequest;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -18,9 +18,9 @@ final class ConcreteAnswerType extends AbstractType
     {
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event): void {
             $form = $event->getForm();
-            if ($event->getData() instanceof ConcreteAnswer) {
+            if ($event->getData() instanceof ConcreteAnswerRequest) {
                 $form->add('selected', CheckboxType::class, [
-                    'label'    => $event->getData()->answerVariant->text,
+                    'label'    => $event->getData()->answerVariant->answerVariant->text,
                     'required' => false,
                 ]);
             }
@@ -30,7 +30,7 @@ final class ConcreteAnswerType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => ConcreteAnswer::class,
+            'data_class' => ConcreteAnswerRequest::class,
         ]);
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity\TestSession;
 
+use App\Request\TestSessionRequest;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\AbstractUid as Uid;
 use Symfony\Component\Uid\Uuid;
@@ -30,5 +31,15 @@ class TestSession
         $this->id = Uuid::v6();
 
         $this->testQuestions = $testQuestions;
+    }
+
+    public static function fromRequest(TestSessionRequest $request): self
+    {
+        $testQuestions = [];
+        foreach ($request->testQuestions as $question) {
+            $testQuestions[] = TestQuestion::fromRequest($question);
+        }
+
+        return new self($testQuestions);
     }
 }

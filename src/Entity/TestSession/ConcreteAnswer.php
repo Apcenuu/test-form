@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity\TestSession;
 
 use App\Entity\Question\AnswerVariant;
+use App\Request\ConcreteAnswerRequest;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\AbstractUid as Uid;
 use Symfony\Component\Uid\Uuid;
@@ -33,5 +34,10 @@ class ConcreteAnswer
         $this->selected      = $selected;
         $this->testQuestion  = $testQuestion;
         $this->answerVariant = $answerVariant;
+    }
+
+    public static function fromRequest(ConcreteAnswerRequest $answerRequest, TestQuestion $testQuestion): self
+    {
+        return new self($answerRequest->selected, $testQuestion, $answerRequest->answerVariant->answerVariant);
     }
 }
