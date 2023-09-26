@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Entity\TestSession;
 
 use App\Entity\Question\AnswerVariant;
-use App\Request\ConcreteAnswerRequest;
+use App\Request\TestSession\ConcreteAnswerRequest;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\AbstractUid as Uid;
 use Symfony\Component\Uid\Uuid;

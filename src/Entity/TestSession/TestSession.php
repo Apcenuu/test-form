@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity\TestSession;
 
-use App\Request\TestSessionRequest;
+use App\Request\TestSession\TestSessionRequest;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\AbstractUid as Uid;
 use Symfony\Component\Uid\Uuid;

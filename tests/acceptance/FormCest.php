@@ -24,6 +24,14 @@ class FormCest
 
     public const RESULT_LINK = '.session-result a';
 
+    public function validationTest(AcceptanceTester $I): void
+    {
+        $I->amOnPage(self::URI);
+        $I->click(self::SUBMIT_BUTTON);
+
+        $I->seeElement('.validation-errors');
+    }
+
     public function successTest(AcceptanceTester $I): void
     {
         $I->amOnPage(self::URI);

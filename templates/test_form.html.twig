@@ -8,6 +8,11 @@
         <div class="row">
             <div class="col-sm-12">
                 {{ form_start(form) }}
+                    {% if form_errors(form) %}
+                        <div class="validation-errors alert alert-danger">
+                            {{ form_errors(form) }}
+                        </div>
+                    {% endif %}
                     {% for concreteAnswer in form.testQuestions %}
                         <div class="alert alert-primary">
                             {{ form_widget(concreteAnswer) }}

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Request;
+namespace App\Request\Question;
 
 use App\Entity\Question\AnswerVariant;
 

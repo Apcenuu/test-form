@@ -2,10 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Request;
+namespace App\Request\TestSession;
 
 use App\Entity\Question\Question;
+use App\Request\Question\AnswerVariantRequest;
+use App\Request\Question\QuestionRequest;
+use App\Validator\AnswerValidator;
+use Symfony\Component\Validator\Constraints as Assert;
 
+#[Assert\Callback([AnswerValidator::class, 'validate'])]
 final class TestSessionRequest
 {
     /**

@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Request;
+namespace App\Request\TestSession;
+
+use App\Request\Question\AnswerVariantRequest;
 
 final class ConcreteAnswerRequest
 {

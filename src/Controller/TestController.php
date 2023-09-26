@@ -7,7 +7,7 @@ namespace App\Controller;
 use App\Entity\Question\Question;
 use App\Entity\TestSession\TestSession;
 use App\Form\TestType;
-use App\Request\TestSessionRequest;
+use App\Request\TestSession\TestSessionRequest;
 use Doctrine\ORM\EntityManagerInterface as EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +24,7 @@ final class TestController extends AbstractController
         $form = $this->createForm(TestType::class, TestSessionRequest::buildFromQuestions($questions));
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->getData() instanceof TestSessionRequest) {
+        if ($form->isSubmitted() && $form->isValid() && $form->getData() instanceof TestSessionRequest) {
 
             $testSession = TestSession::fromRequest($form->getData());
 
