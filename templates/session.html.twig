@@ -7,6 +7,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
+                <h3><span class="badge bg-primary"><div class="answer-counter">{{ count }}</div> Correct</span></h3>
                 {% for testQuestion in session.testQuestions %}
                     <div {% if testQuestion.correctAnswered %} class="alert alert-success test-question-correct" {% else %} class="alert alert-danger test-question-wrong" {% endif %}>
                         <h3>{{ testQuestion.question.text }}</h3>

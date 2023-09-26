@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\TestSession\TestSession;
+use App\Repository\TestSessionRepository;
 use Doctrine\ORM\EntityManagerInterface as EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,10 +24,15 @@ final class SessionController extends AbstractController
     }
 
     #[Route(path: '/sessions/{id}', name: 'session')]
-    public function session(TestSession $session): Response
+    public function session(TestSession $session, EntityManager $entityManager): Response
     {
+        /** @var TestSessionRepository $repository */
+        $repository = $entityManager->getRepository(TestSession::class);
+        $count      = $repository->getCountRightAnswersBySession($session);
+
         return $this->render('session.html.twig', [
             'session' => $session,
+            'count'   => $count,
         ]);
     }
 }

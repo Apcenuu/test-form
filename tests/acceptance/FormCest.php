@@ -24,6 +24,8 @@ class FormCest
 
     public const RESULT_LINK = '.session-result a';
 
+    public const COUNTER_CLASS = '.answer-counter';
+
     public function validationTest(AcceptanceTester $I): void
     {
         $I->amOnPage(self::URI);
@@ -52,6 +54,8 @@ class FormCest
         $I->click(self::RESULT_LINK);
 
         $I->seeNumberOfElements(self::CORRECT_CSS_CLASS, count($questions));
+
+        $I->canSee((string) count($questions), self::COUNTER_CLASS);
     }
 
     public function successOneVariantTest(AcceptanceTester $I): void
@@ -75,6 +79,8 @@ class FormCest
         $I->click(self::RESULT_LINK);
 
         $I->seeNumberOfElements(self::CORRECT_CSS_CLASS, count($questions));
+
+        $I->canSee((string) count($questions), self::COUNTER_CLASS);
     }
 
     public function selectAllTest(AcceptanceTester $I): void
@@ -95,6 +101,8 @@ class FormCest
         $I->click(self::RESULT_LINK);
 
         $I->seeNumberOfElements(self::WRONG_CSS_CLASS, count($questions));
+
+        $I->canSee('0', self::COUNTER_CLASS);
     }
 
 }

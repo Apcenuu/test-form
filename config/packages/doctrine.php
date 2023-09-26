@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Doctrine\ColumnHydrator;
+
 use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
 
 use Symfony\Config\DoctrineConfig;
@@ -27,5 +29,8 @@ return static function (DoctrineConfig $config): void {
             ->alias('App')
     ;
 
-
+    $config->orm()
+        ->entityManager('default')
+        ->hydrator(ColumnHydrator::NAME, ColumnHydrator::class)
+    ;
 };
