@@ -22,9 +22,9 @@ class FormCest
 
     public const SUBMIT_BUTTON = 'button[type=submit]';
 
-    public const RESULT_LINK = '.session-result a';
-
     public const COUNTER_CLASS = '.answer-counter';
+
+    public const QUESTIONS_SELECTOR = '.alert-primary label.required';
 
     public function validationTest(AcceptanceTester $I): void
     {
@@ -38,69 +38,75 @@ class FormCest
     {
         $I->amOnPage(self::URI);
 
-        $questions = $I->grabRepository(Question::class)->findAll();
+        $formQuestions = $I->grabMultiple(self::QUESTIONS_SELECTOR);
 
-        foreach ($questions as $i => $question) {
-            foreach ($question->answerVariants as $j => $answerVariant) {
-                $I->seeNumberOfElements(self::FORM_CSS_ID . $i . self::ANSWERS_FIELD . $j, 1);
-                if ($answerVariant->correct) {
-                    $I->checkOption(self::FORM_CSS_ID . $i . self::ANSWERS_FIELD . $j . self::SELECTED_FIELD);
-                    $I->seeCheckboxIsChecked(self::FORM_CSS_ID . $i . self::ANSWERS_FIELD . $j . self::SELECTED_FIELD);
+        foreach ($formQuestions as $formQuestion) {
+            /** @var Question $question */
+            $question = $I->grabRepository(Question::class)->findOneBy([
+                'text' => $formQuestion,
+            ]);
+            foreach ($question->answerVariants as $variant) {
+                if ($variant->correct) {
+                    $I->checkOption(self::FORM_CSS_ID . $question->id . self::ANSWERS_FIELD . $variant->id . self::SELECTED_FIELD);
+                    $I->seeCheckboxIsChecked(self::FORM_CSS_ID . $question->id . self::ANSWERS_FIELD . $variant->id . self::SELECTED_FIELD);
                 }
             }
         }
 
         $I->click(self::SUBMIT_BUTTON);
-        $I->click(self::RESULT_LINK);
 
-        $I->seeNumberOfElements(self::CORRECT_CSS_CLASS, count($questions));
+        $I->seeNumberOfElements(self::CORRECT_CSS_CLASS, count($formQuestions));
 
-        $I->canSee((string) count($questions), self::COUNTER_CLASS);
+        $I->canSee((string) count($formQuestions), self::COUNTER_CLASS);
     }
 
     public function successOneVariantTest(AcceptanceTester $I): void
     {
         $I->amOnPage(self::URI);
 
-        $questions = $I->grabRepository(Question::class)->findAll();
+        $formQuestions = $I->grabMultiple(self::QUESTIONS_SELECTOR);
 
-        foreach ($questions as $i => $question) {
-            foreach ($question->answerVariants as $j => $answerVariant) {
-                $I->seeNumberOfElements(self::FORM_CSS_ID . $i . self::ANSWERS_FIELD . $j, 1);
-                if ($answerVariant->correct) {
-                    $I->checkOption(self::FORM_CSS_ID . $i . self::ANSWERS_FIELD . $j . self::SELECTED_FIELD);
-                    $I->seeCheckboxIsChecked(self::FORM_CSS_ID . $i . self::ANSWERS_FIELD . $j . self::SELECTED_FIELD);
+        foreach ($formQuestions as $formQuestion) {
+            /** @var Question $question */
+            $question = $I->grabRepository(Question::class)->findOneBy([
+                'text' => $formQuestion,
+            ]);
+            foreach ($question->answerVariants as $variant) {
+                if ($variant->correct) {
+                    $I->checkOption(self::FORM_CSS_ID . $question->id . self::ANSWERS_FIELD . $variant->id . self::SELECTED_FIELD);
+                    $I->seeCheckboxIsChecked(self::FORM_CSS_ID . $question->id . self::ANSWERS_FIELD . $variant->id . self::SELECTED_FIELD);
                     break;
                 }
             }
         }
 
         $I->click(self::SUBMIT_BUTTON);
-        $I->click(self::RESULT_LINK);
 
-        $I->seeNumberOfElements(self::CORRECT_CSS_CLASS, count($questions));
+        $I->seeNumberOfElements(self::CORRECT_CSS_CLASS, count($formQuestions));
 
-        $I->canSee((string) count($questions), self::COUNTER_CLASS);
+        $I->canSee((string) count($formQuestions), self::COUNTER_CLASS);
     }
 
     public function selectAllTest(AcceptanceTester $I): void
     {
         $I->amOnPage(self::URI);
 
-        $questions = $I->grabRepository(Question::class)->findAll();
+        $formQuestions = $I->grabMultiple(self::QUESTIONS_SELECTOR);
 
-        foreach ($questions as $i => $question) {
-            foreach ($question->answerVariants as $j => $answerVariant) {
-                $I->seeNumberOfElements(self::FORM_CSS_ID . $i . self::ANSWERS_FIELD . $j, 1);
-                $I->checkOption(self::FORM_CSS_ID . $i . self::ANSWERS_FIELD . $j . self::SELECTED_FIELD);
-                $I->seeCheckboxIsChecked(self::FORM_CSS_ID . $i . self::ANSWERS_FIELD . $j . self::SELECTED_FIELD);
+        foreach ($formQuestions as $formQuestion) {
+            /** @var Question $question */
+            $question = $I->grabRepository(Question::class)->findOneBy([
+                'text' => $formQuestion,
+            ]);
+            foreach ($question->answerVariants as $variant) {
+                $I->checkOption(self::FORM_CSS_ID . $question->id . self::ANSWERS_FIELD . $variant->id . self::SELECTED_FIELD);
+                $I->seeCheckboxIsChecked(self::FORM_CSS_ID . $question->id . self::ANSWERS_FIELD . $variant->id . self::SELECTED_FIELD);
             }
         }
 
         $I->click(self::SUBMIT_BUTTON);
-        $I->click(self::RESULT_LINK);
 
-        $I->seeNumberOfElements(self::WRONG_CSS_CLASS, count($questions));
+        $I->seeNumberOfElements(self::WRONG_CSS_CLASS, count($formQuestions));
 
         $I->canSee('0', self::COUNTER_CLASS);
     }

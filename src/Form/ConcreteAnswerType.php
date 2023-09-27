@@ -21,6 +21,7 @@ final class ConcreteAnswerType extends AbstractType
             if ($event->getData() instanceof ConcreteAnswerRequest) {
                 $form->add('selected', CheckboxType::class, [
                     'label'    => $event->getData()->answerVariant->answerVariant->text,
+                    'row_attr' => ['class' => 'answer'],
                     'required' => false,
                 ]);
             }

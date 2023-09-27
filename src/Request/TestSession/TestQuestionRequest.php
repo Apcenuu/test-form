@@ -9,7 +9,7 @@ use App\Request\Question\QuestionRequest;
 final class TestQuestionRequest
 {
     /**
-     * @var  iterable<ConcreteAnswerRequest> $concreteAnswers
+     * @var iterable<ConcreteAnswerRequest> $concreteAnswers
      */
     public iterable $concreteAnswers;
 

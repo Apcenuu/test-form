@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace App\Entity\Question;
 
 use App\Entity\TestSession\TestQuestion;
+use App\Repository\QuestionRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\AbstractUid as Uid;
 use Symfony\Component\Uid\Uuid;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: QuestionRepository::class)]
 #[ORM\Table(name: 'questions')]
 class Question
 {

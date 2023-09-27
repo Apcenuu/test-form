@@ -17,7 +17,7 @@ final class AnswerValidator
                 return $answer->selected;
             });
             if (count($selectedAnswers) == 0) {
-                $context->buildViolation('Вы пропустили вопрос ' . $testQuestion->questionRequest->question->text)
+                $context->buildViolation('You forgot question ' . $testQuestion->questionRequest->question->text)
                     ->addViolation()
                 ;
             }

@@ -30,15 +30,20 @@ final class TestSessionRequest
         foreach ($questions as $question) {
             $testQuestionRequest = new TestQuestionRequest(new QuestionRequest($question));
             $concreteAnswers     = [];
-            foreach ($question->answerVariants as $answerVariant) {
-                $concreteAnswers[] = new ConcreteAnswerRequest(
+
+            /** @phpstan-ignore-next-line */
+            $answerVariants = $question->answerVariants->toArray();
+            shuffle($answerVariants);
+
+            foreach ($answerVariants as $answerVariant) {
+                $concreteAnswers[$answerVariant->id->__toString()] = new ConcreteAnswerRequest(
                     false,
                     $testQuestionRequest,
                     new AnswerVariantRequest($answerVariant)
                 );
             }
-            $testQuestionRequest->concreteAnswers = $concreteAnswers;
-            $testQuestionRequests[]               = $testQuestionRequest;
+            $testQuestionRequest->concreteAnswers              = $concreteAnswers;
+            $testQuestionRequests[$question->id->__toString()] = $testQuestionRequest;
         }
 
         return new self($testQuestionRequests);

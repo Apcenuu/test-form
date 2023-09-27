@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use App\Doctrine\ColumnHydrator;
 
+use App\Doctrine\Random;
+
 use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
 
 use Symfony\Config\DoctrineConfig;
@@ -32,5 +34,11 @@ return static function (DoctrineConfig $config): void {
     $config->orm()
         ->entityManager('default')
         ->hydrator(ColumnHydrator::NAME, ColumnHydrator::class)
+    ;
+
+    $config->orm()
+        ->entityManager('default')
+        ->dql()
+        ->numericFunction('random', Random::class)
     ;
 };
