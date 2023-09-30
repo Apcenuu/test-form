@@ -8,7 +8,12 @@ use App\Entity\Question\AnswerVariant;
 use App\Entity\Question\Question;
 use App\Entity\TestSession\TestQuestion;
 use App\Entity\TestSession\TestSession;
+use App\Request\Question\AnswerVariantRequest;
+use App\Request\Question\QuestionRequest;
+use App\Request\TestSession\ConcreteAnswerRequest;
+use App\Request\TestSession\TestQuestionRequest;
 use App\Request\TestSession\TestSessionRequest;
+use App\Tests\Helper\Unit;
 use App\Tests\UnitTester;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -63,5 +68,51 @@ class TestSessionCest
         $I->assertEquals('1+1', $request->testQuestions[$questionKeys[0]]->questionRequest->question->text);
         $I->assertEquals('2+2', $request->testQuestions[$questionKeys[1]]->questionRequest->question->text);
         $I->assertEquals('3+3', $request->testQuestions[$questionKeys[2]]->questionRequest->question->text);
+    }
+
+    public function successValidationTest(UnitTester $I, Unit $helper): void
+    {
+        $answerVariant = new AnswerVariant('2', true);
+        $question      = new Question('1+1', [$answerVariant]);
+
+        $request                  = new TestQuestionRequest(new QuestionRequest($question));
+        $request->concreteAnswers = [];
+
+        $concreteAnswers = [
+            new ConcreteAnswerRequest(
+                true,
+                $request,
+                new AnswerVariantRequest($answerVariant)
+            ),
+        ];
+
+        $request->concreteAnswers = $concreteAnswers;
+
+        $errors = $helper->getValidator()->validate(new TestSessionRequest([$request]));
+
+        $I->assertCount(0, $errors);
+    }
+
+    public function failedValidationTest(UnitTester $I, Unit $helper): void
+    {
+        $answerVariant = new AnswerVariant('2', true);
+        $question      = new Question('1+1', [$answerVariant]);
+
+        $request                  = new TestQuestionRequest(new QuestionRequest($question));
+        $request->concreteAnswers = [];
+
+        $concreteAnswers = [
+            new ConcreteAnswerRequest(
+                false,
+                $request,
+                new AnswerVariantRequest($answerVariant)
+            ),
+        ];
+
+        $request->concreteAnswers = $concreteAnswers;
+
+        $errors = $helper->getValidator()->validate(new TestSessionRequest([$request]));
+
+        $I->assertCount(1, $errors);
     }
 }
