@@ -5,4 +5,4 @@ analysis-code:
 	@php -d memory_limit=-1 vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=-1
 
 testing:
-	@vendor/bin/codecept run
+	@vendor/bin/codecept run --coverage-text
