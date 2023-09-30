@@ -18,3 +18,5 @@ coverage:
         - src/*
     exclude:
         - src/Kernel.php
+        - src/DataFixtures/*
+        - src/Form/*
