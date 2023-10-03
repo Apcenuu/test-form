@@ -6,3 +6,6 @@ analysis-code:
 
 testing:
 	@vendor/bin/codecept run --coverage-text
+
+infection:
+	@vendor/bin/infection --show-mutations --only-covered

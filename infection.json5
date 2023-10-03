@@ -1,0 +1,18 @@
+{
+    "$schema": "vendor/infection/infection/resources/schema.json",
+    "tmpDir": "tests/_output",
+    "testFramework": "codeception",
+    "source": {
+        "directories": [
+            "src"
+        ],
+        "excludes": [
+            "DataFixtures",
+            "Form",
+            "Kernel.php"
+        ]
+    },
+    "mutators": {
+        "@default": true
+    }
+}
